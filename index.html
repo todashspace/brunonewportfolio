@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bruno — Graphic Designer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+    }
+  }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+
+  <!-- ═══ STAGE ═══ -->
+  <main class="stage" id="stage">
+
+    <!-- Background video — plays continuously, unaffected by mode/button changes -->
+    <video
+      class="stage__video"
+      id="bg-video"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      aria-hidden="true">
+      <source src="assets/background-video.mp4" type="video/mp4" />
+    </video>
+
+    <!-- Aurora blobs -->
+    <div class="aurora" aria-hidden="true">
+      <div class="aurora__blob aurora__blob--1"></div>
+      <div class="aurora__blob aurora__blob--2"></div>
+      <div class="aurora__blob aurora__blob--3"></div>
+      <div class="aurora__blob aurora__blob--4"></div>
+    </div>
+
+    <!-- Three.js canvas -->
+    <canvas class="stage__canvas" id="main-canvas"></canvas>
+
+    <!-- Dotted orbit ring -->
+    <svg class="orbit-ring" id="orbit-ring-svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle id="orbit-ring-glow"
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="3"
+              stroke-dasharray="4 14"/>
+      <circle id="orbit-ring-circle"
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="1.2"
+              stroke-dasharray="4 14"/>
+    </svg>
+
+    <!-- Project cards -->
+    <div class="cards-layer" id="cards-layer"></div>
+
+    <!-- Shared reveal group: white fade + video both mask via the same --reveal-r
+         so a single animated value drives both circles in sync -->
+    <div class="about-reveal-group" id="about-reveal-group">
+      <!-- White fade — brightens the backdrop during About mode for text readability -->
+      <div class="about-fade" id="about-fade" aria-hidden="true"></div>
+
+      <!-- Placeholder video that fades in through the same expanding circle reveal.
+           Swap the src for your own footage whenever it's ready. -->
+      <video class="about-video" id="about-video" muted loop playsinline preload="auto" aria-hidden="true">
+        <source src="assets/about-video-placeholder.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <!-- About overlay — hidden until about mode -->
+    <div class="about-overlay" id="about-overlay" aria-hidden="true">
+      <div class="about-hello" id="about-hello">
+        <span class="about-hello__hi">Hi,</span>
+        <span class="about-hello__name">I'm Bruno.</span>
+      </div>
+      <div class="about-bio" id="about-bio">
+        <p>
+          I'm a graphic designer and creative director based in [City].
+          I build visual systems at the intersection of nature, technology,
+          and human experience — brands, spaces, screens, and motion.
+        </p>
+        <p>
+          My work starts from a belief that design should feel like it grew,
+          not like it was manufactured. Every project is treated as an ecosystem.
+        </p>
+        <div class="about-bio__stats">
+          <div><span class="stat-num">7+</span><span class="stat-label">Years</span></div>
+          <div><span class="stat-num">40+</span><span class="stat-label">Projects</span></div>
+          <div><span class="stat-num">12</span><span class="stat-label">Awards</span></div>
+        </div>
+      </div>
+      <!-- Placeholder photo bubbles — swap the picsum URLs for real photos whenever ready -->
+      <div class="about-bubbles" id="about-bubbles" aria-hidden="true">
+        <div class="about-bubble about-bubble--1"><img src="https://picsum.photos/seed/brunoface1/300/300" alt="" /></div>
+        <div class="about-bubble about-bubble--2"><img src="https://picsum.photos/seed/brunoface2/300/300" alt="" /></div>
+        <div class="about-bubble about-bubble--3"><img src="https://picsum.photos/seed/brunoface3/300/300" alt="" /></div>
+        <div class="about-bubble about-bubble--4"><img src="https://picsum.photos/seed/brunoface4/300/300" alt="" /></div>
+      </div>
+    </div>
+
+
+  </main>
+
+  <!-- ═══ SITE LOGO (bottom-left, fixed) ═══ -->
+  <img class="site-logo" id="site-logo" src="assets/logo.png" alt="Bruno logo" />
+
+  <!-- ═══ TOP-RIGHT NAV ═══ -->
+  <nav class="nav-top-right" id="nav-top-right">
+    <button class="nav-top-right__btn" id="about-btn" aria-pressed="false">
+      <span id="about-btn-label">About</span>
+    </button>
+    <button class="nav-top-right__btn" id="contact-btn">Contact</button>
+  </nav>
+
+
+
+  <!-- ═══ CONTACT MODAL ═══ -->
+  <div class="contact-modal" id="contact-modal" aria-hidden="true">
+    <div class="contact-modal__backdrop" id="contact-modal-backdrop"></div>
+    <div class="glass contact-modal__card" id="contact-modal-card">
+      <button class="contact-modal__close" id="contact-modal-close" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+          <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <p class="contact-modal__name">Bruno</p>
+      <p class="contact-modal__role">Graphic Designer + Video Artist</p>
+      <div class="contact-modal__links">
+        <a href="mailto:bruno.mrtz.silva@gmail.com">bruno.mrtz.silva@gmail.com</a>
+        <a href="https://instagram.com/todash__" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══ PROJECT MODAL ═══ -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true">
+    <div class="modal__backdrop" id="modal-backdrop"></div>
+    <div class="glass modal__panel" id="modal-panel">
+      <button class="modal__close" id="modal-close" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="modal__scroll">
+        <div class="modal__hero" id="modal-hero"></div>
+        <div class="modal__content">
+          <div class="modal__header">
+            <div class="modal__meta">
+              <span class="modal__category" id="modal-category"></span>
+              <span class="modal__year" id="modal-year"></span>
+            </div>
+            <h2 class="modal__title" id="modal-title"></h2>
+            <div class="modal__tools" id="modal-tools"></div>
+          </div>
+          <div class="modal__process">
+            <h3>Concept + Process</h3>
+            <div class="modal__process-text" id="modal-process"></div>
+          </div>
+          <!-- Clickable thumbnail grid, navigable with arrows once opened in the lightbox -->
+          <div class="modal__process-grid" id="modal-process-grid"></div>
+          <!-- Custom per-project sections (e.g. "idea 1: refine") — only populated when a project defines them -->
+          <div class="modal__custom-sections" id="modal-custom-sections"></div>
+          <div class="modal__progress-section" id="modal-progress-section-wrap">
+            <h3 id="modal-gallery-title">Development</h3>
+            <div class="modal__gallery" id="modal-gallery"></div>
+          </div>
+          <div class="modal__feature-section" id="modal-feature-section-wrap">
+            <h3 id="modal-feature-title">Final Piece</h3>
+            <div class="modal__feature" id="modal-feature"></div>
+          </div>
+          <div class="modal__deliverables" id="modal-deliverables-wrap">
+            <h3>Deliverables</h3>
+            <div class="modal__deliverables-list" id="modal-deliverables"></div>
+          </div>
+          <div class="modal__project-nav">
+            <button class="modal__nav-btn modal__nav-btn--prev" id="modal-prev-btn">
+              <span class="modal__nav-arrow">
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                  <path d="M12 5l-6 5 6 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+              <span class="modal__nav-label" id="modal-prev-label"></span>
+            </button>
+            <button class="modal__nav-btn modal__nav-btn--next" id="modal-next-btn">
+              <span class="modal__nav-label" id="modal-next-label"></span>
+              <span class="modal__nav-arrow">
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                  <path d="M8 5l6 5-6 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ IMAGE LIGHTBOX ═══ -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="lightbox__backdrop" id="lightbox-backdrop"></div>
+    <button class="lightbox__close" id="lightbox-close" aria-label="Close">
+      <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
+        <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button class="lightbox__nav lightbox__nav--prev" id="lightbox-prev" aria-label="Previous image">
+      <svg width="26" height="26" viewBox="0 0 20 20" fill="none">
+        <path d="M12 5l-6 5 6 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <button class="lightbox__nav lightbox__nav--next" id="lightbox-next" aria-label="Next image">
+      <svg width="26" height="26" viewBox="0 0 20 20" fill="none">
+        <path d="M8 5l6 5-6 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <img class="lightbox__img" id="lightbox-img" src="" alt="" />
+    <div class="lightbox__caption" id="lightbox-caption"></div>
+  </div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
