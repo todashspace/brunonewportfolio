@@ -13,6 +13,7 @@ const CATEGORY_COLORS = {
   'Video + 3D':    '#4A90D9', // blue
   'Packaging':     '#4CAF50', // green
   'UI/UX':         '#B57EDC', // purple
+  'Social Media Promo': '#FF8A3D', // orange
 }
 const CATEGORY_COLOR_FALLBACK = '#9AA5B1'
 
@@ -153,13 +154,19 @@ const PROJECTS = [
     deliverables: ['Package Design', 'Branding', 'Advertising', 'Concept Development'],
   },
   {
-    id: 'newproject', title: 'coming soon', fullTitle: 'coming soon',
-    category: 'Coming Soon', year: '2025', color: '#c9c7c1',
+    id: 'newproject', title: 'Meowballz Co.', fullTitle: 'Meowballz Co.',
+    category: 'Social Media Promo', year: '2025', color: '#FF8A3D',
     thumbnail: 'assets/project pictures/newproject/thumbnail.jpg',
     hoverImg:  'assets/project pictures/newproject/thumbnail.jpg',
     feature: [],
     wip: [],
-    process: `<p></p>`,
+    // Media sections: each slot takes a file path (image or video). Leave '' to keep an empty placeholder.
+    // Drop files in assets/project pictures/newproject/ and paste the paths below.
+    mediaSections: [
+      { heading: 'video work samples',  type: 'video', columns: 3, items: ['', '', ''] },
+      { heading: 'static work samples', type: 'image', columns: 3, items: ['', '', '', '', '', ''] },
+    ],
+    process: `<p>Meowballz is a startup founded by me and my friends several years ago dedicated to showcasing electronic music and artists in both live and digital settings. Through radio shows, outsourced promotion for other artists, and our own live events, we've reached thousands of people in different cities across the country. I principally work in the promotional material, both physical and digital, as well as making live visualizers and art installations for shows.</p>`,
     tools: [],
     deliverables: [],
   },
@@ -716,6 +723,21 @@ function renderModalContent(project) {
     processGridWrap.innerHTML = ''
   }
 
+  // Media sections: headed grids of vertical video/image slots (empty path = blank placeholder slot)
+  const mediaWrap = document.getElementById('modal-media-sections')
+  mediaWrap.innerHTML = (project.mediaSections || []).map(({ heading, type, columns = 3, items }) => `
+    <div class="modal__media-section">
+      <h3>${heading}</h3>
+      <div class="modal__media-grid modal__media-grid--${type}" style="--cols:${columns}">
+        ${items.map((src) => `
+          <div class="modal__media-slot">
+            ${!src ? ''
+              : isVideoSrc(src) ? `<video src="${src}" controls preload="metadata" playsinline></video>`
+              : `<img src="${src}" alt="${heading}" loading="lazy"/>`}
+          </div>`).join('')}
+      </div>
+    </div>`).join('')
+
   // Custom per-project sections (e.g. "idea 1: refine") — empty/hidden unless a project defines them
   const customWrap = document.getElementById('modal-custom-sections')
   if (project.customSections?.length) {
@@ -758,7 +780,7 @@ function renderModalContent(project) {
   // Wire every image anywhere in this modal into one navigable lightbox set —
   // arrows cycle through all of them in DOM order, videos are untouched
   const allModalImgs = document.querySelectorAll(
-    '#modal-hero img, #modal-process-grid img, #modal-gallery img, #modal-custom-sections img, #modal-feature img'
+    '#modal-hero img, #modal-process-grid img, #modal-media-sections img, #modal-gallery img, #modal-custom-sections img, #modal-feature img'
   )
   const allImagesList = Array.from(allModalImgs).map((img) => ({ src: img.src, alt: img.alt }))
   allModalImgs.forEach((img, i) => {
