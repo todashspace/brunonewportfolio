@@ -839,3 +839,27 @@ p      { line-height: 1.7; color: var(--text-mid); }
   }
   .about-bubble { width: clamp(48px, 15vw, 80px); border-radius: 10px; top: 0 !important; }
 }
+
+/* ─── MEDIA SECTIONS (vertical video / image slots) ───── */
+.modal__media-section { margin-bottom: 2.2rem; }
+.modal__media-section h3 { margin-bottom: 1rem; }
+.modal__media-grid {
+  display: grid; grid-template-columns: repeat(var(--cols, 3), 1fr);
+  gap: 10px;
+}
+.modal__media-slot {
+  position: relative; overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px dashed rgba(26,43,56,0.14);
+}
+.modal__media-grid--video .modal__media-slot { aspect-ratio: 9 / 16; }
+.modal__media-grid--image .modal__media-slot { aspect-ratio: 4 / 5; }
+.modal__media-slot:has(img, video) { border: none; }
+.modal__media-slot img, .modal__media-slot video {
+  width: 100%; height: 100%; object-fit: contain; display: block; background: #0a1c28;
+}
+.modal__media-grid--image .modal__media-slot img { object-fit: cover; background: none; cursor: pointer; }
+
+/* Meowballz thumbnail: keep the artwork centered in the card */
+.project-card .card__img { object-position: center; }
