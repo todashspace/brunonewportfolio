@@ -164,7 +164,14 @@ const PROJECTS = [
     // Drop files in assets/project pictures/newproject/ and paste the paths below.
     mediaSections: [
       { heading: 'video work samples',  type: 'video', columns: 3, items: ['', '', ''] },
-      { heading: 'static work samples', type: 'image', columns: 3, items: ['', '', '', '', '', ''] },
+      { heading: 'static work samples', type: 'image', columns: 3, items: [
+        'assets/project pictures/newproject/static-1.jpg',
+        'assets/project pictures/newproject/static-2.jpg',
+        'assets/project pictures/newproject/static-3.jpg',
+        'assets/project pictures/newproject/static-4.jpg',
+        'assets/project pictures/newproject/static-5.jpg',
+        'assets/project pictures/newproject/static-6.jpg',
+      ] },
     ],
     process: `<p>Meowballz is a startup founded by me and my friends several years ago dedicated to showcasing electronic music and artists in both live and digital settings. Through radio shows, outsourced promotion for other artists, and our own live events, we've reached thousands of people in different cities across the country. I principally work in the promotional material, both physical and digital, as well as making live visualizers and art installations for shows.</p>`,
     tools: [],
