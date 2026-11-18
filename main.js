@@ -5,6 +5,17 @@ import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
 const gsap = window.gsap
 
 // ─── PROJECT DATA ─────────────────────────────────────────────────────────────
+// Spot colors for each project category — bright, saturated, one distinct
+// color per type (think New 3DS button colors), applied to the category pill
+const CATEGORY_COLORS = {
+  'Print Media':   '#FF5A5F', // red
+  'Poster + Logo': '#FFC93C', // yellow
+  'Video + 3D':    '#4A90D9', // blue
+  'Packaging':     '#4CAF50', // green
+  'UI/UX':         '#B57EDC', // purple
+}
+const CATEGORY_COLOR_FALLBACK = '#9AA5B1'
+
 const PROJECTS = [
   {
     id: 'verdant', title: 'look at the sky', fullTitle: 'look at the sky',
@@ -23,7 +34,7 @@ const PROJECTS = [
     ],
     process: `<p>This project was an entry for a fictional book series born from my own personal adoration of nature's many phenomenons. In particular, this entry focuses on phenomenon that occurs in the sky, and breaks them down into simple yet scientifically accurate explanations while presenting them with the beauty they deserve.</p><p>All imagery was painted, physically and digitally, by myself.</p>`,
     tools: ['InDesign', 'Photoshop', 'Illustrator', 'Maya'],
-    deliverables: ['Logo System', 'Brand Guidelines', 'Packaging', 'Illustration Library'],
+    deliverables: ['Print media', 'Physical art', 'Illustration'],
   },
   {
     id: 'helio', title: "dance with me, i'm burning up inside", fullTitle: "dance with me, i'm burning up inside",
@@ -42,7 +53,7 @@ const PROJECTS = [
     deliverables: ['3D Animation', 'Edited Video + Audio', 'Real Life Footage', 'Motion Graphics'],
   },
   {
-    id: 'aura', title: 'porter robinson logo', fullTitle: 'porter robinson logo',
+    id: 'aura', title: 'porter robinson', fullTitle: 'porter robinson',
     category: 'Poster + Logo', year: '2024', color: '#88c4e8',
     thumbnail: 'assets/project pictures/porterrobinsonlogo/final_logo.jpg',
     hoverImg:  'assets/project pictures/porterrobinsonlogo/final_logo.jpg',
@@ -67,7 +78,43 @@ const PROJECTS = [
     ],
     process: `<p>This was a two part project consisting of logo creation, as well as poster and information design. The logo was made from editing, combining, and creating new typefaces into one name to convey the dynamism of Porter Robinson's music and art.</p><p>The poster design was made for his upcoming world tour, and was designed to reflect the newly released album's optimism and sense of joy.</p>`,
     tools: ['Maya', 'InDesign', 'Illustrator', 'Photography'],
-    deliverables: ['Design System', 'iOS App Screens', 'Prototype', 'Motion Spec'],
+    deliverables: ['logo creation', 'promotional materials', 'custom typefaces', '3d'],
+  },
+  {
+    id: 'tidal', title: 'studio.com', fullTitle: 'studio.com',
+    category: 'UI/UX', year: '2025', color: '#7ecabd',
+    thumbnail: 'assets/project pictures/studiocom/realcoverpic.jpg',
+    hoverImg:  'assets/project pictures/studiocom/realcoverpic.jpg',
+    featureTitle: 'Prototype Footage',
+    feature: [
+      { img: 'assets/project pictures/studiocom/studio-1.mp4', caption: '', autoplay: true },
+      { img: 'assets/project pictures/studiocom/studio-2.mp4', caption: '', autoplay: true },
+      { img: 'assets/project pictures/studiocom/studio-3.mp4', caption: '', autoplay: true },
+    ],
+    wip: [
+      { img: 'assets/project pictures/studiocom/sketch.jpg', caption: '' },
+      { img: 'assets/project pictures/studiocom/Desktop_-_1.jpg', caption: '' },
+      { img: 'assets/project pictures/studiocom/progro.jpg', caption: '' },
+    ],
+    process: `<p>This concept website built in figma was a prototype for a new type of artist-focused social media, where instead of having a grid of posts, your own "bedroom" was where you displayed your work.</p><p>Others can come and go as they please to inspect and interact the pieces in the bedrooms, serving as both a way to display art, and as a way to discover new, exciting media. Models were built entirely in Maya.</p>`,
+    tools: ['Figma', 'Maya'],
+    deliverables: ['UX/UI', 'Prototype', 'Social Media', '3d'],
+  },
+  {
+    id: 'bloom', title: 'move!!!', fullTitle: 'move!!!',
+    category: 'Video + 3D', year: '2025', color: '#8fcc9e',
+    thumbnail: 'assets/project pictures/move/cover.jpg',
+    hoverImg:  'assets/project pictures/move/cover.jpg',
+    feature: [{ img: 'assets/project pictures/move/final.mp4', caption: '' }],
+    galleryTitle: 'Clips from video',
+    wip: [
+      { img: 'assets/project pictures/move/dev-1.mp4', caption: '' },
+      { img: 'assets/project pictures/move/dev-2.mp4', caption: '' },
+      { img: 'assets/project pictures/move/dev-3.mp4', caption: '' },
+    ],
+    process: `<p>A short film/music video about a colorful, happier world invading our own. Shot, scored, animated and edited by myself.</p>`,
+    tools: ['After Effects', 'Maya', 'FL Studio'],
+    deliverables: ['motion graphics', '3d', 'edited video + audio', 'real life footage'],
   },
   {
     id: 'soleil', title: 'natural ice rebrands', fullTitle: 'natural ice rebrands',
@@ -102,43 +149,7 @@ const PROJECTS = [
     ],
     process: `<p>Three increasingly different ideas for possible rebrands and ad campaigns for Natural Ice beer. They vary from a small refinement, a new take on existing ideas, and a complete wildcard.</p>`,
     tools: ['InDesign', 'Photoshop', 'Illustrator'],
-    deliverables: ['Structural Design', 'Surface Design', 'Print Spec', 'Dielines'],
-  },
-  {
-    id: 'bloom', title: 'move!!!', fullTitle: 'move!!!',
-    category: 'Video + 3D', year: '2025', color: '#8fcc9e',
-    thumbnail: 'assets/project pictures/move/cover.jpg',
-    hoverImg:  'assets/project pictures/move/cover.jpg',
-    feature: [{ img: 'assets/project pictures/move/final.mp4', caption: '' }],
-    galleryTitle: 'Clips from video',
-    wip: [
-      { img: 'assets/project pictures/move/dev-1.mp4', caption: '' },
-      { img: 'assets/project pictures/move/dev-2.mp4', caption: '' },
-      { img: 'assets/project pictures/move/dev-3.mp4', caption: '' },
-    ],
-    process: `<p>A short film/music video about a colorful, happier world invading our own. Shot, scored, animated and edited by myself.</p>`,
-    tools: ['After Effects', 'Maya', 'FL Studio'],
-    deliverables: ['Motion System', 'Logo Animation', 'Web Component', 'Usage Guidelines'],
-  },
-  {
-    id: 'tidal', title: 'studio.com', fullTitle: 'studio.com',
-    category: 'UI/UX', year: '2025', color: '#7ecabd',
-    thumbnail: 'assets/project pictures/studiocom/realcoverpic.jpg',
-    hoverImg:  'assets/project pictures/studiocom/realcoverpic.jpg',
-    featureTitle: 'Prototype Footage',
-    feature: [
-      { img: 'assets/project pictures/studiocom/studio-1.mp4', caption: '', autoplay: true },
-      { img: 'assets/project pictures/studiocom/studio-2.mp4', caption: '', autoplay: true },
-      { img: 'assets/project pictures/studiocom/studio-3.mp4', caption: '', autoplay: true },
-    ],
-    wip: [
-      { img: 'assets/project pictures/studiocom/sketch.jpg', caption: '' },
-      { img: 'assets/project pictures/studiocom/Desktop_-_1.jpg', caption: '' },
-      { img: 'assets/project pictures/studiocom/progro.jpg', caption: '' },
-    ],
-    process: `<p>This concept website built in figma was a prototype for a new type of artist-focused social media, where instead of having a grid of posts, your own "bedroom" was where you displayed your work.</p><p>Others can come and go as they please to inspect and interact the pieces in the bedrooms, serving as both a way to display art, and as a way to discover new, exciting media. Models were built entirely in Maya.</p>`,
-    tools: ['Figma', 'Maya'],
-    deliverables: ['Spatial Concept', 'Wayfinding System', 'Exhibition Graphics', 'Print Production'],
+    deliverables: ['Package design', 'Branding', 'Advertising', 'Concept development'],
   },
 ]
 
@@ -341,7 +352,7 @@ function createCard(orbital) {
         <img class="card__img card__img--hover" src="${project.hoverImg}"  alt="${project.title} detail" loading="lazy"/>
       </div>
       <div class="card__overlay">
-        <span class="card__pill">${project.category}</span>
+        <span class="card__pill" style="background:${CATEGORY_COLORS[project.category] || CATEGORY_COLOR_FALLBACK};border-color:transparent">${project.category}</span>
         <div class="card__info">
           <span class="card__title">${project.title}</span>
           <span class="card__cta">View project →</span>
@@ -596,16 +607,6 @@ const modalBackdrop = document.getElementById('modal-backdrop')
 const modalPrevBtn  = document.getElementById('modal-prev-btn')
 const modalNextBtn  = document.getElementById('modal-next-btn')
 
-// Spot colors for each project category — bright, saturated, one distinct
-// color per type (think New 3DS button colors), applied to the category pill
-const CATEGORY_COLORS = {
-  'Print Media':   '#FF5A5F', // red
-  'Poster + Logo': '#FFC93C', // yellow
-  'Video + 3D':    '#4A90D9', // blue
-  'Packaging':     '#4CAF50', // green
-  'UI/UX':         '#B57EDC', // purple
-}
-const CATEGORY_COLOR_FALLBACK = '#9AA5B1'
 
 // Detects whether an asset path is a video file, so gallery/feature slots
 // can render <video> instead of <img> automatically based on file extension
