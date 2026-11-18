@@ -163,7 +163,11 @@ const PROJECTS = [
     // Media sections: each slot takes a file path (image or video). Leave '' to keep an empty placeholder.
     // Drop files in assets/project pictures/newproject/ and paste the paths below.
     mediaSections: [
-      { heading: 'video work samples',  type: 'video', columns: 3, items: ['', '', ''] },
+      { heading: 'video work samples',  type: 'video', columns: 3, items: [
+        'assets/project pictures/newproject/video-1.mp4',
+        'assets/project pictures/newproject/video-2.mp4',
+        'assets/project pictures/newproject/video-3.mp4',
+      ] },
       { heading: 'static work samples', type: 'image', columns: 3, items: [
         'assets/project pictures/newproject/static-1.jpg',
         'assets/project pictures/newproject/static-2.jpg',
@@ -739,11 +743,18 @@ function renderModalContent(project) {
         ${items.map((src) => `
           <div class="modal__media-slot">
             ${!src ? ''
-              : isVideoSrc(src) ? `<video src="${src}" controls preload="metadata" playsinline></video>`
+              : isVideoSrc(src) ? `<video src="${src}" autoplay muted loop playsinline preload="auto"></video>`
               : `<img src="${src}" alt="${heading}" loading="lazy"/>`}
           </div>`).join('')}
       </div>
     </div>`).join('')
+
+  // Media-section videos autoplay muted; native controls (incl. unmute) appear on hover/tap
+  mediaWrap.querySelectorAll('video').forEach((v) => {
+    v.addEventListener('pointerenter', () => { v.controls = true })
+    v.addEventListener('pointerleave', () => { v.controls = false })
+    v.addEventListener('pointerdown', () => { v.controls = true }) // touch screens have no hover
+  })
 
   // Custom per-project sections (e.g. "idea 1: refine") — empty/hidden unless a project defines them
   const customWrap = document.getElementById('modal-custom-sections')
@@ -824,7 +835,10 @@ function navigateModal(project, direction) {
   })
 }
 
-function closeModal() { modal.classList.remove('active') }
+function closeModal() {
+  modal.classList.remove('active')
+  modal.querySelectorAll('video').forEach((v) => v.pause())
+}
 modalClose.addEventListener('click', closeModal)
 modalBackdrop.addEventListener('click', closeModal)
 
