@@ -611,13 +611,21 @@ p      { line-height: 1.7; color: var(--text-mid); }
   border-radius: var(--radius-md); overflow: hidden;
   aspect-ratio: 16/10; background: var(--surface); position: relative;
 }
-.modal__feature-item img,
-.modal__feature-item video {
+.modal__feature-item img {
   width: 100%; height: 100%; object-fit: cover;
   transition: transform 0.4s ease;
 }
-.modal__feature-item:hover img,
-.modal__feature-item:hover video { transform: scale(1.04); }
+.modal__feature-item video {
+  width: 100%; height: 100%; object-fit: contain;
+  background: #0a1c28;
+  display: block;
+}
+.modal__feature-item:hover img { transform: scale(1.04); }
+.modal__feature-item video:fullscreen,
+.modal__feature-item video::backdrop {
+  object-fit: contain;
+  background: #000;
+}
 .modal__feature-caption {
   position: absolute; bottom: 0; left: 0; right: 0;
   padding: 7px 9px;
