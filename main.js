@@ -34,11 +34,12 @@ const PROJECTS = [
     ],
     process: `<p>This project was an entry for a fictional book series born from my own personal adoration of nature's many phenomenons. In particular, this entry focuses on phenomenon that occurs in the sky, and breaks them down into simple yet scientifically accurate explanations while presenting them with the beauty they deserve.</p><p>All imagery was painted, physically and digitally, by myself.</p>`,
     tools: ['InDesign', 'Photoshop', 'Illustrator', 'Maya'],
-    deliverables: ['Print media', 'Physical art', 'Illustration'],
+    deliverables: ['Print Media', 'Physical Art', 'Illustration'],
   },
   {
     id: 'helio', title: "dance with me, i'm burning up inside", fullTitle: "dance with me, i'm burning up inside",
     category: 'Video + 3D', year: '2025', color: '#f2c84e',
+    galleryTitle: 'Clips from video',
     thumbnail: 'assets/project pictures/dancewithmeimburningupinside/thumbnail.jpg',
     hoverImg:  'assets/project pictures/dancewithmeimburningupinside/thumbnail.jpg',
     feature: [{ img: 'assets/project pictures/dancewithmeimburningupinside/final.mp4', caption: '' }],
@@ -78,7 +79,7 @@ const PROJECTS = [
     ],
     process: `<p>This was a two part project consisting of logo creation, as well as poster and information design. The logo was made from editing, combining, and creating new typefaces into one name to convey the dynamism of Porter Robinson's music and art.</p><p>The poster design was made for his upcoming world tour, and was designed to reflect the newly released album's optimism and sense of joy.</p>`,
     tools: ['Maya', 'InDesign', 'Illustrator', 'Photography'],
-    deliverables: ['logo creation', 'promotional materials', 'custom typefaces', '3d'],
+    deliverables: ['Logo Creation', 'Promotional Materials', 'Custom Typefaces', '3D'],
   },
   {
     id: 'tidal', title: 'studio.com', fullTitle: 'studio.com',
@@ -98,7 +99,7 @@ const PROJECTS = [
     ],
     process: `<p>This concept website built in figma was a prototype for a new type of artist-focused social media, where instead of having a grid of posts, your own "bedroom" was where you displayed your work.</p><p>Others can come and go as they please to inspect and interact the pieces in the bedrooms, serving as both a way to display art, and as a way to discover new, exciting media. Models were built entirely in Maya.</p>`,
     tools: ['Figma', 'Maya'],
-    deliverables: ['UX/UI', 'Prototype', 'Social Media', '3d'],
+    deliverables: ['UX/UI', 'Prototype', 'Social Media', '3D'],
   },
   {
     id: 'bloom', title: 'move!!!', fullTitle: 'move!!!',
@@ -114,7 +115,7 @@ const PROJECTS = [
     ],
     process: `<p>A short film/music video about a colorful, happier world invading our own. Shot, scored, animated and edited by myself.</p>`,
     tools: ['After Effects', 'Maya', 'FL Studio'],
-    deliverables: ['motion graphics', '3d', 'edited video + audio', 'real life footage'],
+    deliverables: ['Motion Graphics', '3D', 'Edited Video + Audio', 'Real Life Footage'],
   },
   {
     id: 'soleil', title: 'natural ice rebrands', fullTitle: 'natural ice rebrands',
@@ -149,7 +150,18 @@ const PROJECTS = [
     ],
     process: `<p>Three increasingly different ideas for possible rebrands and ad campaigns for Natural Ice beer. They vary from a small refinement, a new take on existing ideas, and a complete wildcard.</p>`,
     tools: ['InDesign', 'Photoshop', 'Illustrator'],
-    deliverables: ['Package design', 'Branding', 'Advertising', 'Concept development'],
+    deliverables: ['Package Design', 'Branding', 'Advertising', 'Concept Development'],
+  },
+  {
+    id: 'newproject', title: 'coming soon', fullTitle: 'coming soon',
+    category: 'Coming Soon', year: '2025', color: '#c9c7c1',
+    thumbnail: 'assets/project pictures/newproject/thumbnail.jpg',
+    hoverImg:  'assets/project pictures/newproject/thumbnail.jpg',
+    feature: [],
+    wip: [],
+    process: `<p></p>`,
+    tools: [],
+    deliverables: [],
   },
 ]
 
@@ -352,7 +364,7 @@ function createCard(orbital) {
         <img class="card__img card__img--hover" src="${project.hoverImg}"  alt="${project.title} detail" loading="lazy"/>
       </div>
       <div class="card__overlay">
-        <span class="card__pill" style="background:${CATEGORY_COLORS[project.category] || CATEGORY_COLOR_FALLBACK};border-color:transparent">${project.category}</span>
+        <span class="card__pill">${project.category}</span>
         <div class="card__info">
           <span class="card__title">${project.title}</span>
           <span class="card__cta">View project →</span>
@@ -596,9 +608,63 @@ function exitAbout() {
 }
 
 aboutBtn.addEventListener('click', () => {
+  if (isArchiveOpen) closeArchive()
   if (isAboutMode) exitAbout()
   else enterAbout()
 })
+
+
+// ─── ARCHIVE ──────────────────────────────────────────────────────────────────
+// Add your own pieces by dropping images into assets/archive/ and listing them
+// here. Tiles float around but are not clickable. (Placeholders for now.)
+const ARCHIVE_ITEMS = [
+  'assets/project pictures/lookatthesky/coverpic.jpg',
+  'assets/project pictures/naturalicerebrands/newcans.jpg',
+  'assets/project pictures/porterrobinsonlogo/finalposter1forintern.jpg',
+  'assets/project pictures/studiocom/realcoverpic.jpg',
+  'assets/project pictures/naturalicerebrands/streetadnew.jpg',
+  'assets/project pictures/lookatthesky/earthcover.jpg',
+  'assets/project pictures/porterrobinsonlogo/final_logo.jpg',
+  'assets/project pictures/naturalicerebrands/can3ad3final.jpg',
+  'assets/project pictures/studiocom/progro.jpg',
+  'assets/project pictures/lookatthesky/burstspread.jpg',
+  'assets/project pictures/porterrobinsonlogo/finalposter2forintern.jpg',
+  'assets/project pictures/naturalicerebrands/newbusstation.jpg',
+  'assets/project pictures/move/cover.jpg',
+  'assets/project pictures/dancewithmeimburningupinside/thumbnail.jpg',
+  'assets/project pictures/lookatthesky/tocspread2.jpg',
+  'assets/project pictures/naturalicerebrands/lightbannerfinal.jpg',
+]
+const archiveBtn     = document.getElementById('archive-btn')
+const archiveBtnLabel= document.getElementById('archive-btn-label')
+const archiveEl      = document.getElementById('archive')
+let isArchiveOpen = false
+document.getElementById('archive-grid').innerHTML = ARCHIVE_ITEMS.map((src, i) => {
+  const dur = (5 + (i * 7) % 5).toFixed(1)
+  const delay = (-((i * 13) % 9)).toFixed(1)
+  const dy = 8 + (i * 5) % 10
+  return `<div class="archive__tile" style="--dur:${dur}s;--delay:${delay}s;--dy:${dy}px">
+    <img src="${src}" alt="" loading="lazy" draggable="false"/></div>`
+}).join('')
+
+function openArchive() {
+  if (isAboutMode) exitAbout()
+  isArchiveOpen = true
+  archiveBtn.classList.add('active')
+  archiveBtnLabel.textContent = '← Back'
+  archiveEl.classList.add('active')
+  archiveEl.removeAttribute('aria-hidden')
+  archiveEl.scrollTop = 0
+}
+function closeArchive() {
+  if (!isArchiveOpen) return
+  isArchiveOpen = false
+  archiveBtn.classList.remove('active')
+  archiveBtnLabel.textContent = 'Archive'
+  archiveEl.classList.remove('active')
+  archiveEl.setAttribute('aria-hidden', 'true')
+}
+archiveBtn.addEventListener('click', () => (isArchiveOpen ? closeArchive() : openArchive()))
 
 // ─── MODAL ────────────────────────────────────────────────────────────────────
 const modal         = document.getElementById('modal')
@@ -811,6 +877,6 @@ contactClose.addEventListener('click', closeContact)
 contactBackdrop.addEventListener('click', closeContact)
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') { closeModal(); closeContact() }
+  if (e.key === 'Escape') { closeModal(); closeContact(); closeArchive() }
 })
 

@@ -243,11 +243,11 @@ p      { line-height: 1.7; color: var(--text-mid); }
 }
 .card__pill {
   align-self: flex-start;
-  background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.38);
+  background: #fff; border: 1px solid #fff;
   border-radius: 100px;
   padding: 3px 9px;
   font-family: var(--font-display); font-size: 0.58rem; font-weight: 600;
-  letter-spacing: 0.09em; text-transform: uppercase; color: white;
+  letter-spacing: 0.09em; text-transform: uppercase; color: #000;
   opacity: 0; transform: translateY(-5px);
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
@@ -333,12 +333,17 @@ p      { line-height: 1.7; color: var(--text-mid); }
 }
 
 .about-bubbles {
-  position: absolute; inset: 0;
+  position: absolute;
+  right: 8%; top: 50%; transform: translateY(-50%);
+  display: grid; grid-template-columns: repeat(2, auto);
+  gap: clamp(10px, 1.6vw, 20px);
   pointer-events: none;
 }
 .about-bubble {
-  position: absolute;
-  border-radius: 50%;
+  position: relative;
+  width: clamp(90px, 14vw, 200px);
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
   overflow: hidden;
   border: 3px solid var(--white);
   box-shadow: 0 12px 40px rgba(26,43,56,0.2), 0 1px 0 rgba(255,255,255,0.7) inset;
@@ -346,10 +351,7 @@ p      { line-height: 1.7; color: var(--text-mid); }
   transform: scale(0.3);
 }
 .about-bubble img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.about-bubble--1 { width: clamp(110px, 20vw, 250px); height: clamp(110px, 20vw, 250px); top: 22%;  right: 14%; }
-.about-bubble--2 { width: clamp(72px, 13vw, 160px); height: clamp(72px, 13vw, 160px); top: 40%;  right: 24%; }
-.about-bubble--3 { width: clamp(92px, 16.5vw, 205px); height: clamp(92px, 16.5vw, 205px); top: 46%;  right: 9%; }
-.about-bubble--4 { width: clamp(56px, 10vw, 125px); height: clamp(56px, 10vw, 125px); top: 60%;  right: 22%; }
+.about-bubble--2, .about-bubble--4 { top: clamp(14px, 2.5vw, 34px); }
 .stat-num {
   display: block;
   font-family: var(--font-display);
@@ -835,18 +837,41 @@ p      { line-height: 1.7; color: var(--text-mid); }
   .about-bio p { font-size: 0.82rem; line-height: 1.6; margin-bottom: 0.65rem; }
   .about-bio__stats { gap: 1.2rem; margin-top: 0.9rem; }
 
-  /* Scattered circle layout gets cramped and overlaps on narrow screens —
-     line the bubbles up in one tidy row along the bottom instead. */
+  /* Squares line up in one tidy row along the bottom on narrow screens */
   .about-bubbles {
-    display: flex; align-items: center; justify-content: center;
-    gap: 10px;
-    bottom: 6%; top: auto; left: 0; right: 0;
-    height: auto;
+    display: flex; justify-content: center; gap: 10px;
+    top: auto; bottom: 6%; left: 0; right: 0; transform: none;
   }
-  .about-bubble {
-    position: relative;
-    top: auto; right: auto;
-    width: clamp(56px, 16vw, 86px) !important;
-    height: clamp(56px, 16vw, 86px) !important;
-  }
+  .about-bubble { width: clamp(56px, 18vw, 90px); border-radius: 10px; top: 0 !important; }
+}
+
+/* ─── ARCHIVE ────────────────────────────────────────── */
+.archive {
+  position: fixed; inset: 0; z-index: 790;
+  background: var(--white);
+  overflow-y: auto; overflow-x: hidden;
+  padding: 90px clamp(1.5rem, 6vw, 5rem) 70px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.archive.active { opacity: 1; pointer-events: all; }
+.archive__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(130px, 20vw, 230px), 1fr));
+  gap: clamp(14px, 2.4vw, 32px);
+  align-items: center;
+}
+.archive__tile {
+  pointer-events: none; user-select: none;
+  border-radius: var(--radius-md); overflow: hidden;
+  aspect-ratio: 4 / 5;
+  box-shadow: var(--shadow-card);
+  animation: archive-float var(--dur, 6s) ease-in-out var(--delay, 0s) infinite;
+}
+.archive__tile:nth-child(3n)   { aspect-ratio: 1 / 1; }
+.archive__tile:nth-child(4n+1) { aspect-ratio: 3 / 4; }
+.archive__tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+@keyframes archive-float {
+  0%, 100% { transform: translateY(0) rotate(-0.6deg); }
+  50%      { transform: translateY(calc(var(--dy, 10px) * -1)) rotate(0.6deg); }
 }

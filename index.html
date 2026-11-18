@@ -109,6 +109,11 @@
 
   </main>
 
+  <!-- ═══ ARCHIVE (floating, non-clickable tiles) ═══ -->
+  <div class="archive" id="archive" aria-hidden="true">
+    <div class="archive__grid" id="archive-grid"></div>
+  </div>
+
   <!-- ═══ SITE LOGO (bottom-left, fixed) ═══ -->
   <img class="site-logo" id="site-logo" src="assets/logo.png" alt="Bruno logo" />
 
@@ -116,6 +121,9 @@
   <nav class="nav-top-right" id="nav-top-right">
     <button class="nav-top-right__btn" id="about-btn" aria-pressed="false">
       <span id="about-btn-label">About</span>
+    </button>
+    <button class="nav-top-right__btn" id="archive-btn">
+      <span id="archive-btn-label">Archive</span>
     </button>
     <button class="nav-top-right__btn" id="contact-btn">Contact</button>
   </nav>
