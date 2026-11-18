@@ -282,23 +282,27 @@ p      { line-height: 1.7; color: var(--text-mid); }
 }
 
 /* ─── ABOUT OVERLAY ──────────────────────────────────── */
+/* Text is laid out as a centered flex column (not pinned with top/bottom %), and its
+   sizes scale with viewport HEIGHT too, so it still fits when the window isn't maximized. */
 .about-overlay {
   position: absolute; inset: 0;
   pointer-events: none; z-index: 4;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: clamp(0.7rem, 3vh, 2rem);
+  padding: clamp(64px, 11vh, 110px) 7% clamp(20px, 5vh, 56px);
   /* individual children control their own opacity */
 }
 
 .about-hello {
-  position: absolute;
-  top: 18%; left: 7%;
-  max-width: 86%;
+  position: relative;
+  max-width: 100%;
   pointer-events: none;
   opacity: 0;
   display: flex; flex-direction: column; gap: 0;
 }
 .about-hello__hi {
   font-family: var(--font-display);
-  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-size: clamp(1.8rem, min(5vw, 7.5vh), 4.2rem);
   font-weight: 300;
   color: var(--text-dark);
   line-height: 1;
@@ -306,7 +310,7 @@ p      { line-height: 1.7; color: var(--text-mid); }
 }
 .about-hello__name {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 6.5vw, 5.5rem);
+  font-size: clamp(2.2rem, min(6.5vw, 10vh), 5.5rem);
   font-weight: 700;
   color: var(--text-dark);
   line-height: 1;
@@ -314,36 +318,35 @@ p      { line-height: 1.7; color: var(--text-mid); }
 }
 
 .about-bio {
-  position: absolute;
-  bottom: 16%; left: 7%;
-  max-width: min(300px, 86vw);
+  position: relative;
+  max-width: min(400px, 86vw);
   pointer-events: none;
   opacity: 0;
   text-align: left;
 }
 .about-bio p {
-  font-size: 0.88rem;
-  line-height: 1.72;
+  font-size: clamp(0.72rem, 1.9vh, 0.9rem);
+  line-height: 1.6;
   color: var(--text-mid);
-  margin-bottom: 0.85rem;
+  margin-bottom: clamp(0.5rem, 1.4vh, 0.85rem);
 }
 .about-bio__stats {
   display: flex; gap: 1.6rem;
-  margin-top: 1.2rem;
+  margin-top: clamp(0.6rem, 1.8vh, 1.2rem);
 }
 
 .about-bubbles {
   position: absolute;
-  right: 8%; top: 50%; transform: translateY(-50%);
+  right: 4%; top: 50%; transform: translateY(-50%);
   display: grid; grid-template-columns: repeat(2, auto);
-  gap: clamp(10px, 1.6vw, 20px);
+  gap: clamp(8px, 1.2vw, 16px);
   pointer-events: none;
 }
 .about-bubble {
   position: relative;
-  width: clamp(90px, 14vw, 200px);
+  width: clamp(64px, 9vw, 135px);
   aspect-ratio: 1 / 1;
-  border-radius: 14px;
+  border-radius: 12px;
   overflow: hidden;
   border: 3px solid var(--white);
   box-shadow: 0 12px 40px rgba(26,43,56,0.2), 0 1px 0 rgba(255,255,255,0.7) inset;
@@ -351,7 +354,7 @@ p      { line-height: 1.7; color: var(--text-mid); }
   transform: scale(0.3);
 }
 .about-bubble img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.about-bubble--2, .about-bubble--4 { top: clamp(14px, 2.5vw, 34px); }
+.about-bubble--2, .about-bubble--4 { top: clamp(10px, 1.8vw, 24px); }
 .stat-num {
   display: block;
   font-family: var(--font-display);
@@ -818,84 +821,21 @@ p      { line-height: 1.7; color: var(--text-mid); }
 }
 .modal__process-grid-item:hover img { transform: scale(1.06); }
 
-/* ─── ABOUT PAGE — SMALL / NON-FULLSCREEN VIEWPORTS ─────── */
-/* html, body have overflow: hidden with no scroll fallback, so content has to
-   actually fit the viewport rather than relying on scrolling to reveal it. */
+/* ─── ABOUT PAGE — SMALL / NARROW VIEWPORTS ─────────────── */
 @media (max-width: 760px), (max-height: 560px) {
-  .about-hello {
-    top: 14%; left: 6%; max-width: 88%;
+  .about-overlay {
+    justify-content: flex-start;
+    padding: 72px 6% 120px;
   }
-  .about-hello__hi   { font-size: clamp(1.8rem, 7vw, 2.6rem); }
-  .about-hello__name { font-size: clamp(2.2rem, 9vw, 3.2rem); }
-
-  .about-bio {
-    bottom: auto;
-    top: 46%;
-    left: 6%;
-    max-width: 82vw;
-  }
-  .about-bio p { font-size: 0.82rem; line-height: 1.6; margin-bottom: 0.65rem; }
-  .about-bio__stats { gap: 1.2rem; margin-top: 0.9rem; }
+  .about-hello__hi   { font-size: clamp(1.6rem, min(7vw, 7vh), 2.6rem); }
+  .about-hello__name { font-size: clamp(2rem, min(9vw, 9vh), 3.2rem); }
+  .about-bio p { font-size: clamp(0.7rem, 1.8vh, 0.82rem); line-height: 1.5; }
+  .about-bio__stats { gap: 1.2rem; }
 
   /* Squares line up in one tidy row along the bottom on narrow screens */
   .about-bubbles {
     display: flex; justify-content: center; gap: 10px;
-    top: auto; bottom: 6%; left: 0; right: 0; transform: none;
+    top: auto; bottom: 4%; left: 0; right: 0; transform: none;
   }
-  .about-bubble { width: clamp(56px, 18vw, 90px); border-radius: 10px; top: 0 !important; }
+  .about-bubble { width: clamp(48px, 15vw, 80px); border-radius: 10px; top: 0 !important; }
 }
-
-/* ─── ARCHIVE ────────────────────────────────────────── */
-.archive {
-  position: fixed; inset: 0; z-index: 790;
-  background: var(--white);
-  overflow-y: auto; overflow-x: hidden;
-  padding: 90px clamp(1.5rem, 6vw, 5rem) 70px;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.4s ease;
-}
-.archive.active { opacity: 1; pointer-events: all; }
-.archive__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(clamp(130px, 20vw, 230px), 1fr));
-  gap: clamp(14px, 2.4vw, 32px);
-  align-items: center;
-}
-.archive__tile {
-  pointer-events: none; user-select: none;
-  border-radius: var(--radius-md); overflow: hidden;
-  aspect-ratio: 4 / 5;
-  box-shadow: var(--shadow-card);
-  animation: archive-float var(--dur, 6s) ease-in-out var(--delay, 0s) infinite;
-}
-.archive__tile:nth-child(3n)   { aspect-ratio: 1 / 1; }
-.archive__tile:nth-child(4n+1) { aspect-ratio: 3 / 4; }
-.archive__tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
-@keyframes archive-float {
-  0%, 100% { transform: translateY(0) rotate(-0.6deg); }
-  50%      { transform: translateY(calc(var(--dy, 10px) * -1)) rotate(0.6deg); }
-}
-
-/* ─── MEDIA SECTIONS (vertical video / image slots) ───── */
-.modal__media-section { margin-bottom: 2.2rem; }
-.modal__media-section h3 { margin-bottom: 1rem; }
-.modal__media-grid {
-  display: grid; grid-template-columns: repeat(var(--cols, 3), 1fr);
-  gap: 10px;
-}
-.modal__media-slot {
-  position: relative; overflow: hidden;
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  border: 1px dashed rgba(26,43,56,0.14);
-}
-.modal__media-grid--video .modal__media-slot { aspect-ratio: 9 / 16; }
-.modal__media-grid--image .modal__media-slot { aspect-ratio: 4 / 5; }
-.modal__media-slot:has(img, video) { border: none; }
-.modal__media-slot img, .modal__media-slot video {
-  width: 100%; height: 100%; object-fit: contain; display: block; background: #0a1c28;
-}
-.modal__media-grid--image .modal__media-slot img { object-fit: cover; background: none; cursor: pointer; }
-
-/* Meowballz thumbnail: keep the artwork centered in the card */
-.project-card .card__img { object-position: center; }

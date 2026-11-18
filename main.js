@@ -626,63 +626,10 @@ function exitAbout() {
 }
 
 aboutBtn.addEventListener('click', () => {
-  if (isArchiveOpen) closeArchive()
   if (isAboutMode) exitAbout()
   else enterAbout()
 })
 
-
-// ─── ARCHIVE ──────────────────────────────────────────────────────────────────
-// Add your own pieces by dropping images into assets/archive/ and listing them
-// here. Tiles float around but are not clickable. (Placeholders for now.)
-const ARCHIVE_ITEMS = [
-  'assets/project pictures/lookatthesky/coverpic.jpg',
-  'assets/project pictures/naturalicerebrands/newcans.jpg',
-  'assets/project pictures/porterrobinsonlogo/finalposter1forintern.jpg',
-  'assets/project pictures/studiocom/realcoverpic.jpg',
-  'assets/project pictures/naturalicerebrands/streetadnew.jpg',
-  'assets/project pictures/lookatthesky/earthcover.jpg',
-  'assets/project pictures/porterrobinsonlogo/final_logo.jpg',
-  'assets/project pictures/naturalicerebrands/can3ad3final.jpg',
-  'assets/project pictures/studiocom/progro.jpg',
-  'assets/project pictures/lookatthesky/burstspread.jpg',
-  'assets/project pictures/porterrobinsonlogo/finalposter2forintern.jpg',
-  'assets/project pictures/naturalicerebrands/newbusstation.jpg',
-  'assets/project pictures/move/cover.jpg',
-  'assets/project pictures/dancewithmeimburningupinside/thumbnail.jpg',
-  'assets/project pictures/lookatthesky/tocspread2.jpg',
-  'assets/project pictures/naturalicerebrands/lightbannerfinal.jpg',
-]
-const archiveBtn     = document.getElementById('archive-btn')
-const archiveBtnLabel= document.getElementById('archive-btn-label')
-const archiveEl      = document.getElementById('archive')
-let isArchiveOpen = false
-document.getElementById('archive-grid').innerHTML = ARCHIVE_ITEMS.map((src, i) => {
-  const dur = (5 + (i * 7) % 5).toFixed(1)
-  const delay = (-((i * 13) % 9)).toFixed(1)
-  const dy = 8 + (i * 5) % 10
-  return `<div class="archive__tile" style="--dur:${dur}s;--delay:${delay}s;--dy:${dy}px">
-    <img src="${src}" alt="" loading="lazy" draggable="false"/></div>`
-}).join('')
-
-function openArchive() {
-  if (isAboutMode) exitAbout()
-  isArchiveOpen = true
-  archiveBtn.classList.add('active')
-  archiveBtnLabel.textContent = '← Back'
-  archiveEl.classList.add('active')
-  archiveEl.removeAttribute('aria-hidden')
-  archiveEl.scrollTop = 0
-}
-function closeArchive() {
-  if (!isArchiveOpen) return
-  isArchiveOpen = false
-  archiveBtn.classList.remove('active')
-  archiveBtnLabel.textContent = 'Archive'
-  archiveEl.classList.remove('active')
-  archiveEl.setAttribute('aria-hidden', 'true')
-}
-archiveBtn.addEventListener('click', () => (isArchiveOpen ? closeArchive() : openArchive()))
 
 // ─── MODAL ────────────────────────────────────────────────────────────────────
 const modal         = document.getElementById('modal')
@@ -920,6 +867,6 @@ contactClose.addEventListener('click', closeContact)
 contactBackdrop.addEventListener('click', closeContact)
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') { closeModal(); closeContact(); closeArchive() }
+  if (e.key === 'Escape') { closeModal(); closeContact() }
 })
 
