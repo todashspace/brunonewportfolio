@@ -67,17 +67,11 @@
     <!-- Project cards -->
     <div class="cards-layer" id="cards-layer"></div>
 
-    <!-- Shared reveal group: white fade + video both mask via the same --reveal-r
-         so a single animated value drives both circles in sync -->
+    <!-- Shared reveal group: white fade masks in via --reveal-r,
+         expanding as a circle from the About button's corner -->
     <div class="about-reveal-group" id="about-reveal-group">
       <!-- White fade — brightens the backdrop during About mode for text readability -->
       <div class="about-fade" id="about-fade" aria-hidden="true"></div>
-
-      <!-- Placeholder video that fades in through the same expanding circle reveal.
-           Swap the src for your own footage whenever it's ready. -->
-      <video class="about-video" id="about-video" muted loop playsinline preload="metadata" aria-hidden="true">
-        <source src="assets/about-video-placeholder.mp4" type="video/mp4" />
-      </video>
     </div>
 
     <!-- About overlay — hidden until about mode -->

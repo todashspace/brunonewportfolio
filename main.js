@@ -464,7 +464,6 @@ const aboutHello   = document.getElementById('about-hello')
 const aboutBio     = document.getElementById('about-bio')
 const aboutRevealGroup = document.getElementById('about-reveal-group')
 const siteLogo = document.getElementById('site-logo')
-const aboutVideo   = document.getElementById('about-video')
 
 // Swap the center model out with a scale-down → swap → scale-up transition
 function swapModel(incoming, onDone) {
@@ -511,11 +510,6 @@ function enterAbout() {
   gsap.to(aboutRevealGroup, { '--reveal-r': '150%', duration: 0.7, ease: 'power2.out' })
   gsap.to(siteLogo, { opacity: 0, duration: 0.4, ease: 'power2.out' })
 
-  // Fade the placeholder video in through the same circle
-  aboutVideo.currentTime = 0
-  aboutVideo.play().catch(() => {})
-  gsap.to(aboutVideo, { opacity: 0.6, duration: 0.9, delay: 0.15, ease: 'power2.out' })
-
   // Fade ring out
   gsap.to(ringEl, { opacity: 0, duration: 0.4 })
 
@@ -560,9 +554,6 @@ function exitAbout() {
   // Shrink the white circle back down
   gsap.to(aboutRevealGroup, { '--reveal-r': '0%', duration: 0.5, ease: 'power2.in' })
   gsap.to(siteLogo, { opacity: 1, duration: 0.4, delay: 0.15, ease: 'power2.in' })
-
-  // Fade the video back out
-  gsap.to(aboutVideo, { opacity: 0, duration: 0.3, ease: 'power2.in', onComplete: () => aboutVideo.pause() })
 
   // Hide about text
   gsap.to(aboutHello, { opacity: 0, x: -20, duration: 0.28, ease: 'power2.in' })

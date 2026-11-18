@@ -281,15 +281,6 @@ p      { line-height: 1.7; color: var(--text-mid); }
   pointer-events: none;
 }
 
-.about-video {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  clip-path: circle(var(--reveal-r) at 96% 4%); /* shares the same expanding reveal as about-fade */
-  opacity: 0;
-  pointer-events: none;
-}
-
 /* ─── ABOUT OVERLAY ──────────────────────────────────── */
 .about-overlay {
   position: absolute; inset: 0;
@@ -300,6 +291,7 @@ p      { line-height: 1.7; color: var(--text-mid); }
 .about-hello {
   position: absolute;
   top: 18%; left: 7%;
+  max-width: 86%;
   pointer-events: none;
   opacity: 0;
   display: flex; flex-direction: column; gap: 0;
@@ -324,7 +316,7 @@ p      { line-height: 1.7; color: var(--text-mid); }
 .about-bio {
   position: absolute;
   bottom: 16%; left: 7%;
-  max-width: 300px;
+  max-width: min(300px, 86vw);
   pointer-events: none;
   opacity: 0;
   text-align: left;
@@ -354,10 +346,10 @@ p      { line-height: 1.7; color: var(--text-mid); }
   transform: scale(0.3);
 }
 .about-bubble img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.about-bubble--1 { width: 250px; height: 250px; top: 22%;  right: 14%; }
-.about-bubble--2 { width: 160px; height: 160px; top: 40%;  right: 24%; }
-.about-bubble--3 { width: 205px; height: 205px; top: 46%;  right: 9%; }
-.about-bubble--4 { width: 125px; height: 125px; top: 60%;  right: 22%; }
+.about-bubble--1 { width: clamp(110px, 20vw, 250px); height: clamp(110px, 20vw, 250px); top: 22%;  right: 14%; }
+.about-bubble--2 { width: clamp(72px, 13vw, 160px); height: clamp(72px, 13vw, 160px); top: 40%;  right: 24%; }
+.about-bubble--3 { width: clamp(92px, 16.5vw, 205px); height: clamp(92px, 16.5vw, 205px); top: 46%;  right: 9%; }
+.about-bubble--4 { width: clamp(56px, 10vw, 125px); height: clamp(56px, 10vw, 125px); top: 60%;  right: 22%; }
 .stat-num {
   display: block;
   font-family: var(--font-display);
@@ -823,3 +815,38 @@ p      { line-height: 1.7; color: var(--text-mid); }
   cursor: pointer; transition: transform 0.3s ease;
 }
 .modal__process-grid-item:hover img { transform: scale(1.06); }
+
+/* ─── ABOUT PAGE — SMALL / NON-FULLSCREEN VIEWPORTS ─────── */
+/* html, body have overflow: hidden with no scroll fallback, so content has to
+   actually fit the viewport rather than relying on scrolling to reveal it. */
+@media (max-width: 760px), (max-height: 560px) {
+  .about-hello {
+    top: 14%; left: 6%; max-width: 88%;
+  }
+  .about-hello__hi   { font-size: clamp(1.8rem, 7vw, 2.6rem); }
+  .about-hello__name { font-size: clamp(2.2rem, 9vw, 3.2rem); }
+
+  .about-bio {
+    bottom: auto;
+    top: 46%;
+    left: 6%;
+    max-width: 82vw;
+  }
+  .about-bio p { font-size: 0.82rem; line-height: 1.6; margin-bottom: 0.65rem; }
+  .about-bio__stats { gap: 1.2rem; margin-top: 0.9rem; }
+
+  /* Scattered circle layout gets cramped and overlaps on narrow screens —
+     line the bubbles up in one tidy row along the bottom instead. */
+  .about-bubbles {
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px;
+    bottom: 6%; top: auto; left: 0; right: 0;
+    height: auto;
+  }
+  .about-bubble {
+    position: relative;
+    top: auto; right: auto;
+    width: clamp(56px, 16vw, 86px) !important;
+    height: clamp(56px, 16vw, 86px) !important;
+  }
+}
