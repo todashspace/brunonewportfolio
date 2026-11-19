@@ -183,6 +183,42 @@ const PROJECTS = [
   },
 ]
 
+
+// ─── HOVER TINT ───────────────────────────────────────────────────────────────
+// Samples each thumbnail once for its dominant (most saturated, well-lit) color.
+// Falls back to the project's accent color if the image can't be read.
+const bgTint = document.getElementById('bg-tint')
+function extractMainColor(src, fallback) {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.onload = () => {
+      try {
+        const S = 40
+        const cv = document.createElement('canvas'); cv.width = cv.height = S
+        const ctx = cv.getContext('2d', { willReadFrequently: true })
+        ctx.drawImage(img, 0, 0, S, S)
+        const d = ctx.getImageData(0, 0, S, S).data
+        let r = 0, g = 0, b = 0, wsum = 0
+        for (let i = 0; i < d.length; i += 4) {
+          const pr = d[i], pg = d[i + 1], pb = d[i + 2]
+          const mx = Math.max(pr, pg, pb), mn = Math.min(pr, pg, pb)
+          const sat = mx === 0 ? 0 : (mx - mn) / mx
+          const lum = mx / 255
+          if (lum < 0.15 || (lum > 0.95 && sat < 0.1)) continue // skip near-black / blown-out white
+          const w = sat * sat + 0.02
+          r += pr * w; g += pg * w; b += pb * w; wsum += w
+        }
+        if (!wsum) return resolve(fallback)
+        r /= wsum; g /= wsum; b /= wsum
+        resolve(`rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`)
+      } catch { resolve(fallback) } // canvas tainted (e.g. opened from file://)
+    }
+    img.onerror = () => resolve(fallback)
+    img.src = src
+  })
+}
+PROJECTS.forEach((p) => { extractMainColor(p.thumbnail, p.color).then((c) => { p.tint = c }) })
+
 // ─── LOADERS ──────────────────────────────────────────────────────────────────
 const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/')
@@ -392,6 +428,8 @@ function createCard(orbital) {
 
   el.addEventListener('mouseenter', () => {
     if (isAboutMode) return
+    bgTint.style.setProperty('--tint', project.tint || project.color)
+    bgTint.classList.add('active')
     ;[ { idx: (index - 1 + N) % N, push: 52 },
        { idx: (index + 1) % N,     push: 52 },
        { idx: (index - 2 + N) % N, push: 24 },
@@ -402,6 +440,7 @@ function createCard(orbital) {
   })
 
   el.addEventListener('mouseleave', () => {
+    bgTint.classList.remove('active')
     orbitals.forEach((o) => gsap.to(o, { pushRadius: 0, duration: 0.5, ease: 'power2.inOut' }))
   })
 
