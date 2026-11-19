@@ -20,7 +20,7 @@ const CATEGORY_COLOR_FALLBACK = '#9AA5B1'
 const PROJECTS = [
   {
     id: 'verdant', title: 'look at the sky', fullTitle: 'look at the sky',
-    category: 'Print Media', year: '2025', color: '#5aabd6',
+    category: 'Print Media', year: '2026', color: '#5aabd6',
     thumbnail: 'assets/project pictures/lookatthesky/thumbnail.jpg',
     heroImg:   'assets/project pictures/lookatthesky/coverpic.jpg',
     hoverImg:  'assets/project pictures/lookatthesky/thumbnail.jpg',
@@ -56,7 +56,7 @@ const PROJECTS = [
   },
   {
     id: 'aura', title: 'porter robinson', fullTitle: 'porter robinson',
-    category: 'Poster + Logo', year: '2024', color: '#88c4e8',
+    category: 'Poster + Logo', year: '2025', color: '#88c4e8',
     thumbnail: 'assets/project pictures/porterrobinsonlogo/final_logo.jpg',
     hoverImg:  'assets/project pictures/porterrobinsonlogo/final_logo.jpg',
     feature: [
@@ -84,7 +84,7 @@ const PROJECTS = [
   },
   {
     id: 'tidal', title: 'studio.com', fullTitle: 'studio.com',
-    category: 'UI/UX', year: '2025', color: '#7ecabd',
+    category: 'UI/UX', year: '2026', color: '#7ecabd',
     thumbnail: 'assets/project pictures/studiocom/realcoverpic.jpg',
     hoverImg:  'assets/project pictures/studiocom/realcoverpic.jpg',
     featureTitle: 'Prototype Footage',
@@ -120,7 +120,7 @@ const PROJECTS = [
   },
   {
     id: 'soleil', title: 'natural ice rebrands', fullTitle: 'natural ice rebrands',
-    category: 'Packaging', year: '2024', color: '#f0a898',
+    category: 'Packaging', year: '2025', color: '#f0a898',
     thumbnail: 'assets/project pictures/naturalicerebrands/nattysquarenew.jpg',
     heroImg:   'assets/project pictures/naturalicerebrands/newcans.jpg',
     hoverImg:  'assets/project pictures/naturalicerebrands/nattysquarenew.jpg',
@@ -155,7 +155,7 @@ const PROJECTS = [
   },
   {
     id: 'newproject', title: 'Meowballz Co.', fullTitle: 'Meowballz Co.',
-    category: 'Social Media Promo', year: '2025', color: '#FF8A3D',
+    category: 'Social Media Promo', year: 'Ongoing', color: '#FF8A3D',
     thumbnail: 'assets/project pictures/newproject/thumbnail.jpg',
     hoverImg:  'assets/project pictures/newproject/thumbnail.jpg',
     feature: [],
